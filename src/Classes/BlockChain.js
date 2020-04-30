@@ -9,7 +9,8 @@ import Block from "./Block.js";
 import getNodes from "../Utils/get-nodes.js";
 
 class BlockChain {
-  constructor({ difficulty = 5 }) {
+  constructor({ difficulty = 5, port = 0 }) {
+    this.port = port;
     this.difficulty = difficulty;
     this.blockchain = [this.startGenesisBlock()];
   }
@@ -67,17 +68,21 @@ class BlockChain {
 
     // get a list of nodes that have longer chains
     const fetchNodes = nodes.map(async (node) => {
-      const response = await fetch(`http://${node}`);
-      const body = await response.json();
+      try {
+        const response = await fetch(`http://${node}`);
+        const body = await response.json();
 
-      if (body.chainLength > this.getChainLength()) {
-        return {
-          location: node,
-          chainLength: body.chainLength,
-        };
+        if (body.chainLength > this.getChainLength()) {
+          return {
+            location: node,
+            chainLength: body.chainLength,
+          };
+        }
+
+        return null;
+      } catch (ermahgerd) {
+        return null;
       }
-
-      return null;
     });
 
     const nodeResponses = await Promise.all(fetchNodes);
@@ -86,6 +91,10 @@ class BlockChain {
     const betterNodes = nodeResponses
       .filter((item) => item !== null)
       .sort((a, b) => (a.chainLength > b.chainLength ? -1 : 1));
+
+    if (betterNodes.length === 0) {
+      console.log("No better nodes were found.");
+    }
 
     // now check to make sure the longest chain is valid. If it isn't, then
     // move on to the next one

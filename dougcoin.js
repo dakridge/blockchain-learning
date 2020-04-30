@@ -25,7 +25,10 @@ const main = async () => {
   const config = parseConfig();
 
   const startTime = process.hrtime();
-  const dougCoin = new BlockChain({ difficulty: DIFFICULTY });
+  const dougCoin = new BlockChain({
+    port: PORT,
+    difficulty: DIFFICULTY,
+  });
   await dougCoin.resolveConflicts();
 
   Api.decorate("dougcoin", dougCoin);

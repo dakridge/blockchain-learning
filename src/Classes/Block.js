@@ -3,6 +3,7 @@ import fs from "fs";
 import path from "path";
 import crypto from "crypto-js";
 import { Worker } from "worker_threads";
+import formatISO from 'date-fns/formatISO/index.js';
 
 // Chain functions
 import computeHash from "./chain-fns/compute-hash.js";
@@ -15,7 +16,7 @@ const __dirname = path.dirname(new URL(import.meta.url).pathname);
 class Block {
   constructor(index, timestamp, data, precedingHash = null) {
     this.index = index;
-    this.timestamp = timestamp;
+    this.timestamp = formatISO(timestamp);
     this.data = data;
     this.precedingHash = precedingHash;
     this.hash = this.computeHash();

@@ -16,7 +16,7 @@ const addNode = (newIPAddress) => {
 
   if (!nodeExists) {
     const nodesCollection = getStoragePath('nodes');
-    fs.appendFileSync(nodesCollection, `\n${newIPAddress}`);
+    fs.appendFileSync(nodesCollection, `${newIPAddress}\n`);
 
     return {
       nodeAdded: true,

@@ -1,0 +1,8 @@
+https://www.guru99.com/blockchain-tutorial.html#3
+https://learnmeabitcoin.com/guide/blockchain
+https://hackernoon.com/ethereum-turing-completeness-and-rich-statefulness-explained-e650db7fc1fb
+
+https://www.activestate.com/blog/how-to-build-a-blockchain-in-python/
+https://hackernoon.com/learn-blockchains-by-building-one-117428612f46
+https://www.savjee.be/2018/10/Signing-transactions-blockchain-javascript/
+https://github.com/dvf/blockchain/blob/master/blockchain.py

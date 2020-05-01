@@ -3,8 +3,10 @@ import faker from "faker";
 import commandLineArgs from "command-line-args";
 
 // Project imports
+import log from './src/Utils/log.js'
 import Api from "./src/Api/index.js";
 import BlockChain from "./src/Classes/BlockChain.js";
+import registerNode from "./src/Utils/register-node.js";
 
 // configuration
 import parseConfig from "./src/Utils/parse-config.js";
@@ -25,11 +27,16 @@ const main = async () => {
   const config = parseConfig();
 
   const startTime = process.hrtime();
+
+  // instantiate the blockchain
   const dougCoin = new BlockChain({
     port: PORT,
     difficulty: DIFFICULTY,
   });
+
+  // check with other nodes and
   await dougCoin.resolveConflicts();
+  await registerNode({ port: PORT });
 
   Api.decorate("dougcoin", dougCoin);
 

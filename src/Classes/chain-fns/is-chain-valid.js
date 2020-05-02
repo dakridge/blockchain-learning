@@ -2,7 +2,7 @@
 import computeHash from "./compute-hash.js";
 
 const isChainValid = (blockchain) => {
-  for (let ii = 1; ii < blockchain.length; ii++) {
+  for (let ii = 0; ii < blockchain.length; ii++) {
     const currentBlock = blockchain[ii];
     const precedingBlock = blockchain[ii - 1];
 

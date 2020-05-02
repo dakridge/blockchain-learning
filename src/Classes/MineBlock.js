@@ -3,19 +3,8 @@ import faker from "faker";
 import crypto from "crypto-js";
 import { workerData, parentPort } from 'worker_threads';
 
-const computeHash = (nonce) => {
-    const { index, precedingHash, timestamp, data } = workerData;
-
-    const hash = crypto.SHA256(
-        index +
-        precedingHash +
-        timestamp +
-        data +
-        nonce
-    ).toString();
-
-    return hash;
-}
+// Project Imports
+import computeHash from './chain-fns/compute-hash.js';
 
 const mineBlock = (data) => {
     let nonce = 0;

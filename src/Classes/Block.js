@@ -40,7 +40,7 @@ class Block {
           index: this.index,
           precedingHash: this.precedingHash,
           timestamp: this.timestamp,
-          data: JSON.stringify(this.data),
+          data: this.data,
           difficulty: difficulty,
         },
       });

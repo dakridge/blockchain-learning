@@ -46,16 +46,21 @@ class Block {
       });
 
       miner.on("message", (data) => {
-        const { nonce } = data;
+        console.log('message - ', data);
+        if (data.done) {
+          const { nonce } = data;
 
-        this.nonce = nonce;
-        this.hash = this.computeHash();
+          this.nonce = nonce;
+          this.hash = this.computeHash();
 
-        resolve(data);
+          resolve(data);
+        }
       });
 
-      miner.on("error", (ermahgerd) => {
-        console.log("error - ", ermahgerd);
+      miner.on("error", reject);
+
+      miner.on("close", (ermahgerd) => {
+        console.log("closed - ", ermahgerd);
       });
     });
   }

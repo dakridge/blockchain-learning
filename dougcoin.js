@@ -21,13 +21,17 @@ const main = async () => {
     { name: "difficulty", alias: "d", type: Number },
   ]);
 
-  const PORT = options.port || config.PORT;
-  const DIFFICULTY = options.difficulty || config.DIFFICULTY;
-
   // get the config
   const config = parseConfig();
 
+  // set props
+  const PORT = options.port || config.PORT;
+  const DIFFICULTY = options.difficulty || config.DIFFICULTY;
+
   const startTime = process.hrtime();
+
+  // startup print
+  log('important', `Starting the dougcoin miner. Difficulty=${DIFFICULTY}`)
 
   // instantiate the blockchain
   const dougCoin = new BlockChain({

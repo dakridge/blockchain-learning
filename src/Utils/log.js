@@ -8,6 +8,17 @@ const log = (type, message) => {
             break;
         }
 
+        case 'important': {
+            const paddedMessage = `  ${message}  `;
+            const dahses = Array.from({ length: paddedMessage.length }).map(() => { return '-'; }).join('');
+
+            console.log('\n');
+            console.log(chalk.yellowBright.bold(dahses));
+            console.log(chalk.greenBright.bold(paddedMessage))
+            console.log(chalk.yellowBright.bold(dahses));
+            console.log('\n');
+        }
+
         default: {
             // pass
         }

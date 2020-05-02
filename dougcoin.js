@@ -13,15 +13,16 @@ import parseConfig from "./src/Utils/parse-config.js";
 
 const main = async () => {
   const COUNT = 200;
-  const DIFFICULTY = 6;
 
   // parse args
   const options = commandLineArgs([
     { name: "port", alias: "p", type: Number },
     { name: "count", alias: "c", type: Number },
+    { name: "difficulty", alias: "d", type: Number },
   ]);
 
   const PORT = options.port || config.PORT;
+  const DIFFICULTY = options.difficulty || config.DIFFICULTY;
 
   // get the config
   const config = parseConfig();

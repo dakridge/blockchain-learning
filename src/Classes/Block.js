@@ -46,7 +46,6 @@ class Block {
       });
 
       miner.on("message", (data) => {
-        console.log('message - ', data);
         if (data.done) {
           const { nonce } = data;
 

@@ -1,5 +1,6 @@
 {
     "PORT": "3685",
     "NAME": "DOUGCOIN",
-    "VERSION": "0.0.1"
+    "VERSION": "0.0.1",
+    "DIFFICULTY": 6
 }

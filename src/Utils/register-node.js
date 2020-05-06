@@ -3,10 +3,10 @@ import fetch from "node-fetch";
 
 // configuration
 import log from '../Utils/log.js'
-import getNodes from "../Utils/get-nodes.js";
+import { getNodes } from '../storage-fns/nodes.js'
 
 const registerNode = async ({ port = 0 }) => {
-  const nodes = getNodes();
+  const nodes = await getNodes();
 
   const registrationRequests = nodes.map(async (node) => {
     try {

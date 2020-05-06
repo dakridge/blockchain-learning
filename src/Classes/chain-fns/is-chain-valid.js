@@ -2,15 +2,19 @@
 import computeHash from "./compute-hash.js";
 
 const isChainValid = (blockchain) => {
-  for (let ii = 0; ii < blockchain.length; ii++) {
+  for (let ii = 1; ii < blockchain.length; ii++) {
     const currentBlock = blockchain[ii];
     const precedingBlock = blockchain[ii - 1];
 
-    console.log("block ", ii);
-    console.log(currentBlock);
-    console.log(computeHash(currentBlock));
+    const computedHash = computeHash(
+      currentBlock.index,
+      currentBlock.precedingHash,
+      currentBlock.timestamp,
+      currentBlock.data,
+      currentBlock.nonce
+    );
 
-    if (currentBlock.hash !== computeHash(currentBlock)) {
+    if (currentBlock.hash !== computedHash) {
       return false;
     }
 

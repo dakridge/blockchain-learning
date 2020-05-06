@@ -40,12 +40,11 @@ const main = async () => {
   });
 
   // check with other nodes and
+  await dougCoin.initialize();
   await dougCoin.resolveConflicts();
   await registerNode({ port: PORT });
 
   Api.decorate("dougcoin", dougCoin);
-
-  console.log("Starting to mine some doug coins.");
 
   try {
     await Api.listen(PORT, "0.0.0.0");

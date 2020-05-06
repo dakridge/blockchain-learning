@@ -4,15 +4,29 @@ import fetch from "node-fetch";
 // Blockchain functions
 import isChainValid from "./chain-fns/is-chain-valid.js";
 
+// Storage functions
+import { getNodes } from '../storage-fns/nodes.js';
+import { getChain, saveBlock } from '../storage-fns/simple.js';
+
 // Project Imports
 import Block from "./Block.js";
-import getNodes from "../Utils/get-nodes.js";
 
 class BlockChain {
   constructor({ difficulty = 5, port = 0 }) {
     this.port = port;
     this.difficulty = difficulty;
-    this.blockchain = [this.startGenesisBlock()];
+    this.blockchain = [];
+  }
+
+  async initialize() {
+    const chain = await getChain();
+
+    if (!chain || chain.length === 0) {
+      this.blockchain = [await this.startGenesisBlock()]
+    }
+    else {
+      this.blockchain = chain;
+    }
   }
 
   getChainLength() {
@@ -23,8 +37,11 @@ class BlockChain {
     return this.blockchain;
   }
 
-  startGenesisBlock() {
-    return new Block(0, new Date(), "Initial Block in the Chain", "0");
+  async startGenesisBlock() {
+    const block = new Block(0, new Date(), "Initial Block in the Chain", "0");
+    await saveBlock(0, block);
+
+    return block;
   }
 
   obtainLatestBlock() {
@@ -47,6 +64,7 @@ class BlockChain {
     this.blockchain.push(newBlock);
 
     // add block to persistent storage
+    await saveBlock(latestBlock.index + 1, newBlock);
 
     const hrend = process.hrtime(hrstart);
     console.info("Mining time: %ds %dms", hrend[0], hrend[1] / 1000000);
@@ -64,7 +82,7 @@ class BlockChain {
    */
   async resolveConflicts() {
     // we are only loking for chains longer than ours
-    const nodes = getNodes();
+    const nodes = await getNodes();
 
     // get a list of nodes that have longer chains
     const fetchNodes = nodes.map(async (node) => {
@@ -105,7 +123,10 @@ class BlockChain {
       const { chain } = body;
 
       const chainIsValid = isChainValid(chain);
-      console.log(chainIsValid);
+
+      if (chainIsValid) {
+        console.log('We found a good node.');
+      }
     }
   }
 }

@@ -1,14 +1,16 @@
 // Dependencies
 
+// Storage functions
+import { insertNode } from '../../storage-fns/nodes.js';
+
 // utils
 import log from "../../Utils/log.js";
-import addNode from "../../Utils/add-node.js";
-import getNodes from "../../Utils/get-nodes.js";
+import { getNodes } from '../../storage-fns/nodes.js'
 import checkNodeHealth from "../../Utils/check-node-health.js";
 
 async function routes(fastify, options) {
   fastify.get("/nodes", async (request, reply) => {
-    const nodes = getNodes();
+    const nodes = await getNodes();
 
     return {
       name: "nodes",
@@ -27,7 +29,7 @@ async function routes(fastify, options) {
 
     if (nodeIsHealthy) {
       // add the new ip address to the local storage
-      const update = addNode(`${incomingNodeIPAddress}:${incomingPort}`);
+      const update = insertNode(`${incomingNodeIPAddress}:${incomingPort}`);
       status = update.nodeAdded ? "Added" : "Node already exists";
 
       if (update.nodeAdded) {

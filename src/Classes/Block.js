@@ -8,7 +8,6 @@ import { Worker } from "worker_threads";
 import computeHash from "./chain-fns/compute-hash.js";
 
 // utils
-import getStoragePath from "../Utils/get-storage-path.js";
 
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 

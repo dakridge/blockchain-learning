@@ -1,6 +1,6 @@
 // dependencies
-import fs from "fs";
 import path from "path";
+import isIP from 'is-ip';
 import fse from 'fs-extra';
 
 // get current directory

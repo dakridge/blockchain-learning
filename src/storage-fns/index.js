@@ -121,6 +121,8 @@ const blockLocation = getBlockLocation(4097);
 console.log('block location ', blockLocation);
 
 const main = async () => {
+    var start = process.hrtime();
+
     for (let ii = 0; ii < (totalFiles * BLOCKS_PER_FILE) * 10; ii += 1) {
         const data = {
             index: ii,
@@ -135,6 +137,9 @@ const main = async () => {
 
         await writeToBlock(ii, data);
     }
+
+    const end = process.hrtime(start);
+    console.info("Mining time: %ds %dms", end[0], end[1] / 1000000);
 }
 
 main();

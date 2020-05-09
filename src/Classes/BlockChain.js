@@ -5,11 +5,12 @@ import fetch from "node-fetch";
 import isChainValid from "./chain-fns/is-chain-valid.js";
 
 // Storage functions
-import { getNodes } from '../storage-fns/nodes.js';
-import { getChain, saveBlock } from '../storage-fns/simple.js';
+import { getNodes } from "../storage-fns/nodes.js";
+import { getChain, saveBlock } from "../storage-fns/simple.js";
 
 // Project Imports
 import Block from "./Block.js";
+import log from "../Utils/log.js";
 
 class BlockChain {
   constructor({ difficulty = 5, port = 0 }) {
@@ -18,15 +19,31 @@ class BlockChain {
     this.blockchain = [];
   }
 
-  async initialize() {
+  async startup() {
     const chain = await getChain();
+    const isValid = isChainValid(chain);
 
-    if (!chain || chain.length === 0) {
-      this.blockchain = [await this.startGenesisBlock()]
+    if (!isValid) {
+      log(
+        "error",
+        `The local chain is not valid. Will request chain from nodes.`
+      );
+    } else {
+      log(
+        "success",
+        `Local chain is valid and has a length of ${chain.length} blocks.`
+      );
     }
-    else {
+
+    // store the chain in memory or start a new chain
+    if (!chain || !isValid || chain.length === 0) {
+      this.blockchain = [await this.startGenesisBlock()];
+    } else {
       this.blockchain = chain;
     }
+
+    // run the consensus algorithm
+    await this.resolveConflicts();
   }
 
   getChainLength() {
@@ -111,7 +128,7 @@ class BlockChain {
       .sort((a, b) => (a.chainLength > b.chainLength ? -1 : 1));
 
     if (betterNodes.length === 0) {
-      console.log("No better nodes were found.");
+      log("warning", "No better nodes were found.");
     }
 
     // now check to make sure the longest chain is valid. If it isn't, then
@@ -122,10 +139,17 @@ class BlockChain {
       const body = await response.json();
       const { chain } = body;
 
+      // make sure the chain is valid
       const chainIsValid = isChainValid(chain);
 
+      // if the chain is valid, set our chain to be this one
       if (chainIsValid) {
-        console.log('We found a good node.');
+        this.blockchain = chain;
+        console.log("success", `We found a good node at ${node.location}`);
+
+        // because we sorted these by chain length, there is no need to
+        // continue checking the other nodes
+        break;
       }
     }
   }

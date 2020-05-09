@@ -34,6 +34,11 @@ export const getChain = async () => {
     return blockchain;
 }
 
+export const getChainLength = async () => {
+    const chain = await getChain();
+    return chain.length;
+}
+
 export const saveBlock = async (blockIndex, block) => {
     let chain = await getChain();
     const filePath = await getFilePath();

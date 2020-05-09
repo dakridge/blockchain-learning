@@ -3,10 +3,11 @@ import faker from "faker";
 import commandLineArgs from "command-line-args";
 
 // Project imports
-import log from './src/Utils/log.js'
+import log from "./src/Utils/log.js";
 import Api from "./src/Api/index.js";
 import BlockChain from "./src/Classes/BlockChain.js";
 import registerNode from "./src/Utils/register-node.js";
+import getIPAddress from "./src/Utils/get-ip-address.js";
 
 // configuration
 import parseConfig from "./src/Utils/parse-config.js";
@@ -30,8 +31,12 @@ const main = async () => {
 
   const startTime = process.hrtime();
 
+  // determine location
+  const address = getIPAddress();
+
   // startup print
-  log('important', `Starting the dougcoin miner. Difficulty=${DIFFICULTY}`)
+  log("important", `Starting the dougcoin miner. Difficulty=${DIFFICULTY}`);
+  log("info", `Running at: ${address}:${PORT}`);
 
   // instantiate the blockchain
   const dougCoin = new BlockChain({
@@ -40,8 +45,8 @@ const main = async () => {
   });
 
   // check with other nodes and
-  await dougCoin.initialize();
-  await dougCoin.resolveConflicts();
+  await dougCoin.startup();
+  // await dougCoin.resolveConflicts();
   await registerNode({ port: PORT });
 
   Api.decorate("dougcoin", dougCoin);

@@ -1,2 +1,4 @@
 node_modules
-storage
+storage/blockchain
+storage/nodes-list
+storage/simple-blockchain
